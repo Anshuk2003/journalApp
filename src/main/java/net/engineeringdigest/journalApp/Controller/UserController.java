@@ -24,7 +24,7 @@ public class UserController {
         userInDB.setUsername(user.getUsername());
         userInDB.setPassword(user.getPassword());
         userService.saveNewUser(userInDB);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping

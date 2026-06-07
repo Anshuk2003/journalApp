@@ -10,8 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/public")
 public class PublicController {
+
     @Autowired
     private UserService userService;
+
+    @GetMapping("/health-check")
+    public ResponseEntity<?> healthCheck(){
+        return new  ResponseEntity<>("App health is good",HttpStatus.OK);
+    }
 
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody User user){

@@ -1,16 +1,21 @@
 package net.engineeringdigest.journalApp.Controller;
 
+import net.engineeringdigest.journalApp.DTO.ApiResponse;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.JournalEntryService;
 import net.engineeringdigest.journalApp.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,10 +37,32 @@ public class JournalEntryController {
         String userName=authentication.getName();
     User user  =userService.findByUserName(userName);
     List<JournalEntry> all= user.getJournalEntries();
+
+    HttpHeaders headers=new HttpHeaders();
+    headers.add("X-API-Version", "1.0");
+    headers.add("X-Response-Time", String.valueOf(System.currentTimeMillis()));
+
     if(all!=null && !all.isEmpty()){
-        return new ResponseEntity<>(all,HttpStatus.OK);
+
+        ApiResponse<List<JournalEntry>> response = ApiResponse.<List<JournalEntry>>builder()
+                .title("Journal Entries Retrieved")
+                .message("Success")
+                .status(HttpStatus.OK.value())
+                .timestamp(LocalDateTime.now())
+                .data(all)
+                .build();
+
+        return new ResponseEntity<>(response,headers,HttpStatus.OK);
     }
-    else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        ApiResponse<List<JournalEntry>> response = ApiResponse.<List<JournalEntry>>builder()
+                .title("No Journal Entries Found")
+                .message("No journal entries exist for the current user")
+                .status(HttpStatus.NOT_FOUND.value())
+                .timestamp(LocalDateTime.now())
+                .data(Collections.emptyList())
+                .build();
+
+        return new ResponseEntity<>(response, headers, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
