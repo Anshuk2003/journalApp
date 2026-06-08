@@ -13,5 +13,4 @@ public class ApiResponse<T> {
     private int status;
     private LocalDateTime timestamp;
     private T data;
-
 }
