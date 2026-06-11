@@ -4,10 +4,10 @@ import net.engineeringdigest.journalApp.externalAPIRespone.WeatherAPIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+@Service
 public class WeatherService {
 
     private static final String apiKey = "13cec79bd2a39d71b66f3680cf8cc82f";
